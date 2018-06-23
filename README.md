@@ -25,39 +25,39 @@ $ aws s3 cp localfilename s3://CODE_BUILD_ENVIRONMENT_VARIABLE_BUCKET_NAME --pro
 
 You would need an IAM Role to reflect those permissions. For example
 ```
-$ CodeBuildServiceRole:
-    $ Type: AWS::IAM::Role
-    $ Properties:
-      $ AssumeRolePolicyDocument:
-        $ Version: '2012-10-17'
-        $ Statement:
-          $ - Effect: Allow
-            $ Principal:
-              $ Service:
-                $ - codebuild.amazonaws.com
-            $ Action:
-              $ - 'sts:AssumeRole'
-      $ Path: "/"
-      $ Policies:
-        $ - PolicyName: CodeBuildAccess
-          $ PolicyDocument:
-            $ Version: '2012-10-17'
-            $ Statement:
-              $ - Effect: Allow
-                $ Resource:
-                  $ - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}_build'
-                  $ - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}_build:*'
-                $ Action:
-                  $ - 'logs:CreateLogGroup'
-                  $ - 'logs:CreateLogStream'
-                  $ - 'logs:PutLogEvents'
-              $ - Effect: Allow
-                $ Resource:
-                  $ - !Sub 'arn:aws:s3:::${ArtifactBucketNameHere}/*'
-                $ Action:
-                  $ - 's3:GetObject'
-                  $ - 's3:GetObjectVersion'
-                  $ - 's3:PutObject'
+CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - codebuild.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: "/"
+      Policies:
+        - PolicyName: CodeBuildAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Resource:
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}_build'
+                  - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/${ProjectName}_build:*'
+                Action:
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:PutLogEvents'
+              - Effect: Allow
+                Resource:
+                  - !Sub 'arn:aws:s3:::${ArtifactBucketNameHere}/*'
+                Action:
+                  - 's3:GetObject'
+                  - 's3:GetObjectVersion'
+                  - 's3:PutObject'
 ```
 
 This is only an example Role and is not intended to be used in a production environment. This is for educational purposes only.
